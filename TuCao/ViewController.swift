@@ -13,11 +13,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        super.viewDidLoad()
         let frame = CGRect(x:0, y:20, width:view.bounds.width, height:view.bounds.width*0.6)
         let imageView = ["2.jpg","3.jpg","4.jpg"]
         
-        let loopView = XHAdLoopView(frame: frame, images: imageView, autoPlay: true, delay: 3, isFromNet: false)
+        let loopView = XHAdLoopView(frame: frame, images: imageView as NSArray, autoPlay: true, delay: 3, isFromNet: false)
         loopView.delegate = self
         
         view.addSubview(loopView)

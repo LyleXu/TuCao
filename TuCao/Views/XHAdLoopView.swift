@@ -21,10 +21,10 @@ class XHAdLoopView: UIView {
             currentImgs.removeAllObjects()
             let count = self.images!.count
             var i = NSInteger(self.currentPage!+count-1)%count
-            currentImgs.addObject(self.images![i])
-            currentImgs.addObject(self.images![self.currentPage!])
+            currentImgs.add(self.images![i])
+            currentImgs.add(self.images![self.currentPage!])
             i = NSInteger(self.currentPage!+1)%count
-            currentImgs.addObject(self.images![i])
+            currentImgs.add(self.images![i])
             return currentImgs
         }
     }
@@ -33,7 +33,7 @@ class XHAdLoopView: UIView {
     private var images: NSArray?
     private var autoPlay : Bool?
     private var isFromNet : Bool?
-    private var delay : NSTimeInterval?
+    private var delay : TimeInterval?
     
     var delegate:XHAdLoopViewDelegate?
     
@@ -45,7 +45,7 @@ class XHAdLoopView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(frame:CGRect ,images:NSArray, autoPlay:Bool, delay:NSTimeInterval, isFromNet:Bool){
+    convenience init(frame:CGRect ,images:NSArray, autoPlay:Bool, delay:TimeInterval, isFromNet:Bool){
         self.init(frame: frame)
         self.images = images;
         self.autoPlay = autoPlay
@@ -58,7 +58,7 @@ class XHAdLoopView: UIView {
         
         if images.count<2{
             self.autoPlay = false
-            pageControl?.hidden = true
+            pageControl?.isHidden = true
         }
         
         if self.autoPlay == true {
@@ -76,14 +76,14 @@ class XHAdLoopView: UIView {
         imageScrollView?.showsVerticalScrollIndicator=false
         imageScrollView?.bounces = false
         imageScrollView?.delegate = self
-        imageScrollView?.contentSize = CGSizeMake(self.bounds.width*3, 0)
-        imageScrollView?.contentOffset = CGPointMake(self.frame.width, 0)
-        imageScrollView?.pagingEnabled = true
+        imageScrollView?.contentSize = CGSize(width:self.bounds.width*3, height:0)
+        imageScrollView?.contentOffset = CGPoint(x:self.frame.width,y:0)
+        imageScrollView?.isPagingEnabled = true
         self.addSubview(imageScrollView!)
         
         for index in 0..<3 {
-            let imageView = UIImageView(frame: CGRectMake(self.bounds.width*CGFloat(index), 0, self.bounds.width, self.bounds.height))
-            imageView.userInteractionEnabled = true
+            let imageView = UIImageView(frame: CGRect(x:self.bounds.width*CGFloat(index), y:0, width:self.bounds.width, height:self.bounds.height))
+            imageView.isUserInteractionEnabled = true
             imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(XHAdLoopView.imageViewClick)))
             
             
@@ -110,19 +110,19 @@ class XHAdLoopView: UIView {
         pageControl = UIPageControl(frame: CGRect(x:pageX, y:pageY, width: pageW, height: pageH))
         pageControl?.numberOfPages = images!.count
         pageControl?.currentPage = 0
-        pageControl?.userInteractionEnabled = false
+        pageControl?.isUserInteractionEnabled = false
         self.addSubview(pageControl!)
         
     }
     
     private func startAutoPlay() {
-        self.performSelector(#selector(XHAdLoopView.nextPage), withObject: nil, afterDelay: delay!)
+        self.perform(#selector(XHAdLoopView.nextPage), with: nil, afterDelay: delay!)
     }
     
-    func nextPage() {
-        NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(XHAdLoopView.nextPage), object: nil)
-        imageScrollView!.setContentOffset(CGPointMake(2 * self.frame.width, 0), animated: true)
-        self.performSelector(#selector(XHAdLoopView.nextPage), withObject: nil, afterDelay: delay!)
+    @objc func nextPage() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(XHAdLoopView.nextPage), object: nil)
+        imageScrollView!.setContentOffset(CGPoint(x:2 * self.frame.width, y:0), animated: true)
+        self.perform(#selector(XHAdLoopView.nextPage), with: nil, afterDelay: delay!)
     }
     
     //每次图片滚动时刷新图片
@@ -137,21 +137,21 @@ class XHAdLoopView: UIView {
             }
         }
         
-        imageScrollView!.contentOffset = CGPointMake(self.frame.width, 0)
+        imageScrollView!.contentOffset = CGPoint(x:self.frame.width, y: 0)
     }
     
     //图片点击
-    func imageViewClick(){
-        if self.delegate != nil && (self.delegate?.respondsToSelector(#selector(XHAdLoopViewDelegate.adLoopView(_:IconClick:)))) != nil {
-            self.delegate!.adLoopView(self, IconClick: currentPage!)
-        }
+    @objc func imageViewClick(){
+//        if self.delegate != nil && (self.delegate?.respondsToSelector(#selector(XHAdLoopViewDelegate.adLoopView(_:IconClick:)))) != nil {
+//            self.delegate!.adLoopView(adLoopView: self, IconClick: currentPage!)
+//        }
     }
 
 }
 
 extension XHAdLoopView : UIScrollViewDelegate{
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        scrollView.setContentOffset(CGPointMake(self.frame.width, 0), animated: true)
+        scrollView.setContentOffset(CGPoint(x:self.frame.width, y:0), animated: true)
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {

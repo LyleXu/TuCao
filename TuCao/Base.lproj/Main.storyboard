@@ -37,7 +37,7 @@
         <!--旅行吐槽-->
         <scene sceneID="76T-Wf-b6D">
             <objects>
-                <viewController id="fgB-CL-QeV" sceneMemberID="viewController">
+                <viewController id="fgB-CL-QeV" customClass="ViewController" customModule="TuCao" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Cvi-aZ-at8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
